@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/edit_complete"
+        android:orderInCategory="100"
+        android:title="@string/edit_complete"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/edit_save"
+        android:orderInCategory="200"
+        android:title="@string/edit_save"
+        app:showAsAction="ifRoom" />
+</menu>

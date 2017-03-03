@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.dartmouth.cs.chrono.MainActivity">
+
+    <item
+        android:id="@+id/action_task"
+        android:orderInCategory="100"
+        android:title="@string/action_add_task"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_event"
+        android:orderInCategory="200"
+        android:title="@string/action_add_event"
+        app:showAsAction="ifRoom" />
+</menu>

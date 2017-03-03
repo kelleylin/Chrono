@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Chrono</string>
+
+    <!-- Main Activity Action Menu Items-->
+    <string name="action_add_task">Add Task</string>
+    <string name="action_add_event">Add Event</string>
+    <string name="action_user_preferences">User Preferences</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_task">TaskActivity</string>
+    <string name="title_activity_event">EventActivity</string>
+    <string name="list_complete">Complete</string>
+    <string name="edit_save">Save</string>
+    <string name="edit_complete">Complete</string>
+    <string name="menu_add">Add</string>
+    <string name="add_task_title">Task Name</string>
+    <string name="add_task_title_hint">\"Final Paper\"</string>
+    <string name="add_task_deadline">Deadline</string>
+    <string name="add_task_urgency">Task Urgency</string>
+    <string name="add_task_importance">Task Importance</string>
+    <string name="add_task_duration">Anticipated Duration</string>
+    <string name="add_task_split_task">If splittable...</string>
+    <string name="add_task_min_split">Minimum Split Time</string>
+
+    <!--Add / Edit Task or Event Menu Items-->
+</resources>
