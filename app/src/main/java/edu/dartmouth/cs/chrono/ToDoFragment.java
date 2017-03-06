@@ -1,17 +1,14 @@
 package edu.dartmouth.cs.chrono;
 
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.Loader;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.app.LoaderManager;
+import android.content.Loader;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -51,6 +48,8 @@ public class ToDoFragment extends Fragment implements
         ListView entryView = (ListView)v.findViewById(R.id.task_list);
         taskAdapter = new TaskViewAdapter(getActivity(), entries);
         entryView.setAdapter(taskAdapter);
+
+        Log.d("START", "App started");
 
         return v;
     }

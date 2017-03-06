@@ -6,6 +6,7 @@ package edu.dartmouth.cs.chrono;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Adapter to allow for multi-line views in to-do list fragment
@@ -114,6 +114,9 @@ public class TaskViewAdapter extends ArrayAdapter<Task> {
         protected String doInBackground(Long... params) {
             TaskDbHelper taskDatabase = new TaskDbHelper(getContext());
             taskDatabase.removeEntry(params[0]);
+            ArrayList<Task> current = taskDatabase.fetchEntries();
+            double score = ScoreFunction.scoreSchedule(current);
+            Log.d("SCORE", "DELETED TASK | Score of schedule: " + Math.round(score));
             return String.valueOf(params[0]);
         }
 

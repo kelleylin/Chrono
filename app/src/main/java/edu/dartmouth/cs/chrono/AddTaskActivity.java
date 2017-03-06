@@ -105,7 +105,7 @@ public class AddTaskActivity extends AppCompatActivity {
             splitMinutes = splitHours * 60;
         }
 
-        // Create mulitple tasks
+        // Create multiple tasks
 
         // No split was indicated
         if (splitMinutes == 0 || splitMinutes == durationMinutes ||
@@ -190,6 +190,9 @@ public class AddTaskActivity extends AppCompatActivity {
         protected String doInBackground(Task... params) {
             TaskDbHelper taskDatabase = new TaskDbHelper(getApplicationContext());
             long id = taskDatabase.insertTask(params[0]);
+            ArrayList<Task> current = taskDatabase.fetchEntries();
+            double score = ScoreFunction.scoreSchedule(current);
+            Log.d("SCORE", "ADDED TASK | Score of schedule: " + Math.round(score));
             return String.valueOf(id);
         }
 
