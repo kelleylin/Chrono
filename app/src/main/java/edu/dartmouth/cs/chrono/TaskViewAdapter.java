@@ -117,6 +117,7 @@ public class TaskViewAdapter extends ArrayAdapter<Task> {
             ArrayList<Task> current = taskDatabase.fetchEntries();
             double score = ScoreFunction.scoreSchedule(current);
             Log.d("SCORE", "DELETED TASK | Score of schedule: " + Math.round(score));
+            ScoreFunction.optimize(current);
             return String.valueOf(params[0]);
         }
 

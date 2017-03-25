@@ -46,7 +46,7 @@ public class AddTaskActivity extends AppCompatActivity {
         int hours, minutes;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             hours = timePicker.getHour();
-            minutes = timePicker.getHour();
+            minutes = timePicker.getMinute();
         } else {
             hours = timePicker.getCurrentHour();
             minutes = timePicker.getCurrentMinute();
@@ -86,6 +86,8 @@ public class AddTaskActivity extends AppCompatActivity {
         } catch (NumberFormatException e) {
             durationMinutes = durationHours * 60;
         }
+
+        newTask.setStartTime(current.getTimeInMillis() + 900000);
 
         // Get min split time
         EditText splitHoursText = (EditText)findViewById(R.id.add_task_min_split_hours);
@@ -193,6 +195,7 @@ public class AddTaskActivity extends AppCompatActivity {
             ArrayList<Task> current = taskDatabase.fetchEntries();
             double score = ScoreFunction.scoreSchedule(current);
             Log.d("SCORE", "ADDED TASK | Score of schedule: " + Math.round(score));
+            ScoreFunction.optimize(current);
             return String.valueOf(id);
         }
 
