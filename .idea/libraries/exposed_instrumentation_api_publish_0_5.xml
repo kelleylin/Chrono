@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="exposed-instrumentation-api-publish-0.5">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/06bc7bcbe0d834816bf5193dc77e1dd0ff6096b8/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/06bc7bcbe0d834816bf5193dc77e1dd0ff6096b8/output/res" />
+      <root url="file://$USER_HOME$/.android/build-cache/38de97c49206d17bea497b7c56dda298b425eec8/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/38de97c49206d17bea497b7c56dda298b425eec8/output/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

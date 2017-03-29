@@ -195,7 +195,7 @@ public class AddTaskActivity extends AppCompatActivity {
             ArrayList<Task> current = taskDatabase.fetchEntries();
             double score = ScoreFunction.scoreSchedule(current);
             Log.d("SCORE", "ADDED TASK | Score of schedule: " + Math.round(score));
-            ScoreFunction.optimize(current);
+            ArrayList<Long> optimal = ScoreFunction.optimize(current);
             return String.valueOf(id);
         }
 
