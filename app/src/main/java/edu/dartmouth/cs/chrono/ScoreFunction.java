@@ -110,15 +110,21 @@ public class ScoreFunction {
                     + priorityScore - (overOneHour * scoreMultiplier / 2.5) + (averageBreak * scoreMultiplier / 5.0)
                     + (scoreMultiplier / (1 + standardDeviation(beforeDeadlineList) + standardDeviation(breakList)
                     + standardDeviation(continuousWorkingList))) - (longestContinuous * scoreMultiplier / 10.0)
-                    + (totalExtraTime * scoreMultiplier / 20.0) - (countOverlaps * scoreMultiplier * scoreMultiplier);
+                    + (totalExtraTime * scoreMultiplier / 20.0);
+                    //- (countOverlaps * scoreMultiplier * scoreMultiplier);
 
-            if ((timeTravel == true) || (countOverlaps > 0))
-                if (score > 0)
+            if ((timeTravel == true) || (countOverlaps > 0)) {
+                if (score > 0) {
                     score *= -1.0;
+                }
+            }
+
+            if (countOverlaps > 0) {
+                score -= (countOverlaps * scoreMultiplier * scoreMultiplier);
+            }
 
             if (completeCount < entries.size()) {
-
-                if (score >= 0) {
+                if (score > 0) {
                     score *= (0.01 + ((double) completeCount / (double) entries.size()));
                 }
                 else {
@@ -190,7 +196,7 @@ public class ScoreFunction {
             Log.d("OPTIMIZE", "Best simplex index: " + bestIndex);
 
             // terminating condition
-            if (((simplexScores.get(bestIndex) - previousScore) >= errorTolerance) || (iterations >= (errorTolerance * n * n))) {
+            if (((simplexScores.get(bestIndex) - previousScore) >= errorTolerance) || (iterations >= (errorTolerance * errorTolerance))) {
                 Log.d("OPTIMIZE", "Optimization completed in " + iterations + " iterations.");
                 Log.d("OPTIMIZE", "Local optimal score: " + previousScore);
                 printSchedule(previousOptimalSchedule);
