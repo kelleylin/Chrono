@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * Created by Bill on 3/5/2017.
@@ -114,6 +115,7 @@ public class ScoreFunction {
                     //- (countOverlaps * scoreMultiplier * scoreMultiplier);
 
             if ((timeTravel == true) || (countOverlaps > 0)) {
+            //if (timeTravel == true) {
                 if (score > 0) {
                     score *= -1.0;
                 }
@@ -150,6 +152,8 @@ public class ScoreFunction {
     }
 
     public static ArrayList<Long> optimize(ArrayList<Task> entries) {
+        Calendar calendar = Calendar.getInstance();
+
         if (entries.size() < 1) {
             return null;
         }
@@ -157,9 +161,10 @@ public class ScoreFunction {
         ArrayList<Task> testTasks = new ArrayList<>(entries);
         ArrayList<Long> x0 = new ArrayList<>();
         ArrayList<ArrayList<Long>> simplex = new ArrayList<>();
+        Random randomizer = new Random();
 
         for (int i = 0; i < entries.size(); i++) {
-            x0.add(entries.get(i).getStartTime());
+            x0.add(calendar.getTimeInMillis() + (long)(Math.random()*(double)(entries.get(i).getDeadline() - calendar.getTimeInMillis() - (entries.get(i).getDuration()*60000))));
         }
 
         simplex.add(x0);
@@ -182,10 +187,12 @@ public class ScoreFunction {
         ArrayList<Double> simplexScores = scoreSimplex(entries, simplex);
         int worstIndex = maxArrayIndex(simplexScores);
         int bestIndex = minArrayIndex(simplexScores);
-        double previousScore = simplexScores.get(bestIndex) + 1;
+
         int iterations = 0;
         double errorTolerance = 50 * n;
+        double terminationCriteria = 0;
         ArrayList<Long> previousOptimalSchedule = simplex.get(bestIndex);
+        double previousScore = simplexScores.get(worstIndex) - terminationCriteria;
 
         while (true) {
 
@@ -196,10 +203,11 @@ public class ScoreFunction {
             Log.d("OPTIMIZE", "Best simplex index: " + bestIndex);
 
             // terminating condition
-            if (((simplexScores.get(bestIndex) - previousScore) >= errorTolerance) || (iterations >= (errorTolerance * errorTolerance))) {
+            if (((simplexScores.get(worstIndex) - previousScore) > errorTolerance) || (iterations >= (errorTolerance * errorTolerance))) {
                 Log.d("OPTIMIZE", "Optimization completed in " + iterations + " iterations.");
                 Log.d("OPTIMIZE", "Local optimal score: " + previousScore);
-                printSchedule(previousOptimalSchedule);
+                //printSchedule(previousOptimalSchedule);
+                //Log.d("SCHEDULE", "Score: " + previousScore);
                 return previousOptimalSchedule;
             }
 
@@ -382,7 +390,7 @@ public class ScoreFunction {
 
     public static void printSchedule (ArrayList<Long> schedule) {
         Calendar taskDate = Calendar.getInstance();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
 
         Log.d("SCHEDULE", "Optimal schedule as follows:");
 
@@ -391,5 +399,39 @@ public class ScoreFunction {
             String dateTime = formatter.format(taskDate.getTime());
             Log.d("SCHEDULE", "Task " + i + " at " + dateTime);
         }
+    }
+
+    public static ArrayList<Long> computeSchedule(ArrayList<Task> entries) {
+        if (entries.size() < 1) {
+            return null;
+        }
+
+        ArrayList<Task> testTasks = new ArrayList<>(entries);
+        int n = entries.size();
+
+        ArrayList<Long> bestSchedule = optimize(entries);
+        for (int k = 0; k < bestSchedule.size(); k++) {
+            testTasks.get(k).setStartTime(bestSchedule.get(k));
+        }
+        double bestScore = scoreSchedule(testTasks);
+
+        ArrayList<Long> newSchedule;
+
+        for (int i = 0; i < 10*n; i++) {
+            newSchedule = optimize(entries);
+            for (int j = 0; j < newSchedule.size(); j++) {
+                testTasks.get(j).setStartTime(newSchedule.get(j));
+            }
+            double newScore = scoreSchedule(testTasks);
+
+            if (newScore < bestScore) {
+                bestScore = newScore;
+                bestSchedule = newSchedule;
+            }
+        }
+
+        Log.d("SCHEDULE", "OVERALL BEST");
+        printSchedule(bestSchedule);
+        return bestSchedule;
     }
 }

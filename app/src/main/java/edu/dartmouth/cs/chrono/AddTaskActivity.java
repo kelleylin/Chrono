@@ -87,7 +87,7 @@ public class AddTaskActivity extends AppCompatActivity {
             durationMinutes = durationHours * 60;
         }
 
-        newTask.setStartTime(current.getTimeInMillis() + 900000);
+        newTask.setStartTime(current.getTimeInMillis() + 60000);
 
         // Get min split time
         EditText splitHoursText = (EditText)findViewById(R.id.add_task_min_split_hours);
@@ -195,7 +195,8 @@ public class AddTaskActivity extends AppCompatActivity {
             ArrayList<Task> current = taskDatabase.fetchEntries();
             double score = ScoreFunction.scoreSchedule(current);
             Log.d("SCORE", "ADDED TASK | Score of schedule: " + Math.round(score));
-            ArrayList<Long> optimal = ScoreFunction.optimize(current);
+            //ArrayList<Long> optimal = ScoreFunction.optimize(current);
+            ArrayList<Long> optimal = ScoreFunction.computeSchedule(current);
             return String.valueOf(id);
         }
 
