@@ -34,7 +34,7 @@ public class ScoreFunction {
     }
 
     public static double scoreSchedule(ArrayList<Task> entries) {
-        Log.d("SCORE", "Computing score of schedule: " + entries.size() + " tasks");
+        //Log.d("SCORE", "Computing score of schedule: " + entries.size() + " tasks");
 
         Calendar calendar = Calendar.getInstance();
 
@@ -145,8 +145,8 @@ public class ScoreFunction {
         Log.d("TEST", ""+continuousTime);
         Log.d("TEST", ""+averageBreak);
         Log.d("TEST", ""+longestContinuous);
-        */
         Log.d("SCORE", "Overlaps: " + countOverlaps + " Complete: " + completeCount);
+        */
 
         return -score;
     }
@@ -178,9 +178,9 @@ public class ScoreFunction {
             simplex.get(k).set(k-1, val);
         }
 
-        Log.d("OPTIMIZE", "Simplex size: " + simplex.size());
+        //Log.d("OPTIMIZE", "Simplex size: " + simplex.size());
         for (int l = 0; l < simplex.size(); l++) {
-            Log.d("OPTIMIZE", "Simplex " + l + " :" + simplex.get(l).toString());
+            //Log.d("OPTIMIZE", "Simplex " + l + " :" + simplex.get(l).toString());
         }
 
         int n = simplex.size();
@@ -199,13 +199,13 @@ public class ScoreFunction {
             simplexScores = scoreSimplex(entries, simplex);
             worstIndex = maxArrayIndex(simplexScores);
             bestIndex = minArrayIndex(simplexScores);
-            Log.d("OPTIMIZE", "Worst simplex index: " + worstIndex);
-            Log.d("OPTIMIZE", "Best simplex index: " + bestIndex);
+            //Log.d("OPTIMIZE", "Worst simplex index: " + worstIndex);
+            //Log.d("OPTIMIZE", "Best simplex index: " + bestIndex);
 
             // terminating condition
             if (((simplexScores.get(worstIndex) - previousScore) > errorTolerance) || (iterations >= (errorTolerance * errorTolerance))) {
                 Log.d("OPTIMIZE", "Optimization completed in " + iterations + " iterations.");
-                Log.d("OPTIMIZE", "Local optimal score: " + previousScore);
+                //Log.d("OPTIMIZE", "Local optimal score: " + previousScore);
                 //printSchedule(previousOptimalSchedule);
                 //Log.d("SCHEDULE", "Score: " + previousScore);
                 return previousOptimalSchedule;
@@ -241,12 +241,12 @@ public class ScoreFunction {
             x_1Score = simplexScores.get(bestIndex);
             x_nScore = simplexScores.get(maxArrayIndex2(simplexScores, worstIndex));
 
-            Log.d("OPTIMIZE", "r score: " + rScore + " x1 score: " + x_1Score + " xn score: " + x_nScore);
+            //Log.d("OPTIMIZE", "r score: " + rScore + " x1 score: " + x_1Score + " xn score: " + x_nScore);
             //Log.d("OPTIMIZE", "r: " + r.toString());
             //Log.d("OPTIMIZE", "m: " + m.toString());
 
             if ((rScore < x_nScore) && (x_1Score <= rScore)) {
-                Log.d("OPTIMIZE", "REFLECT");
+                //Log.d("OPTIMIZE", "REFLECT");
                 simplex.set(worstIndex, r);
                 continue;
             }
@@ -262,15 +262,15 @@ public class ScoreFunction {
                 }
 
                 double sScore = scoreSchedule(testTasks);
-                Log.d("OPTIMIZE", "s score: " + sScore);
-                Log.d("OPTIMIZE", "s: " + s.toString());
+                //Log.d("OPTIMIZE", "s score: " + sScore);
+                //Log.d("OPTIMIZE", "s: " + s.toString());
 
                 if (sScore < rScore) {
-                    Log.d("OPTIMIZE", "EXPAND");
+                    //Log.d("OPTIMIZE", "EXPAND");
                     simplex.set(worstIndex, s);
                     continue;
                 } else {
-                    Log.d("OPTIMIZE", "REFLECT");
+                    //Log.d("OPTIMIZE", "REFLECT");
                     simplex.set(worstIndex, r);
                     continue;
                 }
@@ -288,7 +288,7 @@ public class ScoreFunction {
                     }
                     double cScore = scoreSchedule(testTasks);
                     if (cScore < rScore) {
-                        Log.d("OPTIMIZE", "CONTRACT OUTSIDE");
+                        //Log.d("OPTIMIZE", "CONTRACT OUTSIDE");
                         simplex.set(worstIndex, c);
                         continue;
                     }
@@ -303,8 +303,8 @@ public class ScoreFunction {
                         testTasks.get(f).setStartTime(cc.get(f));
                     }
                     double ccScore = scoreSchedule(testTasks);
-                    if (ccScore < rScore) {
-                        Log.d("OPTIMIZE", "CONTRACT IN");
+                    if (ccScore < simplexScores.get(worstIndex)) {
+                        //Log.d("OPTIMIZE", "CONTRACT IN");
                         simplex.set(worstIndex, cc);
                         continue;
                     }
@@ -342,7 +342,7 @@ public class ScoreFunction {
             simplexScores.add(scoreSchedule(testTasks));
         }
 
-        Log.d("OPTIMIZE", "Simplex scores: " + simplexScores.toString());
+        //Log.d("OPTIMIZE", "Simplex scores: " + simplexScores.toString());
         return simplexScores;
     }
 
