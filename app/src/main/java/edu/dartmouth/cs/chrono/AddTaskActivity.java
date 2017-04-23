@@ -25,6 +25,10 @@ public class AddTaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Do not allow for a deadline before the current time
+        DatePicker datePicker = (DatePicker) findViewById(R.id.add_task_deadline_date);
+        Calendar cal = Calendar.getInstance();
+        datePicker.setMinDate(cal.getTimeInMillis());
     }
 
     private ArrayList<Task> saveTask() {
@@ -62,12 +66,12 @@ public class AddTaskActivity extends AppCompatActivity {
         else
             newTask.setDeadline(current.getTimeInMillis());
 
-        // Urgency and Importance
-        RatingBar urgencyBar = (RatingBar) findViewById(R.id.add_task_urgency_bar);
-        newTask.setTaskUrgency((int)urgencyBar.getRating());
+        /*RatingBar urgencyBar = (RatingBar) findViewById(R.id.add_task_urgency_bar);
+        newTask.setTaskUrgency((int)urgencyBar.getRating());*/
 
+        // Importance
         RatingBar importanceBar = (RatingBar) findViewById(R.id.add_task_importance_bar);
-        newTask.setTaskUrgency((int)importanceBar.getRating());
+        newTask.setTaskImportance((int)importanceBar.getRating());
 
         // Get duration
         EditText durationHoursText = (EditText)findViewById(R.id.add_task_duration_hours);
@@ -177,6 +181,8 @@ public class AddTaskActivity extends AppCompatActivity {
                 entryAddWorker.execute(tasks.get(i));
             }
             finish();
+
+
             return true;
         }
 
@@ -197,6 +203,13 @@ public class AddTaskActivity extends AppCompatActivity {
             Log.d("SCORE", "ADDED TASK | Score of schedule: " + Math.round(score));
             //ArrayList<Long> optimal = ScoreFunction.optimize(current);
             ArrayList<Long> optimal = ScoreFunction.computeSchedule(current);
+
+            if (optimal != null) {
+                ArrayList<Task> present = taskDatabase.fetchEntries();
+                for (int i = 0; i < optimal.size(); i++) {
+                    taskDatabase.updateTaskWithStartTime(present.get(i).getId(), optimal.get(i));
+                }
+            }
             return String.valueOf(id);
         }
 

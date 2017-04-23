@@ -81,14 +81,36 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public long updateTask(long id) {
+    public long updateTask(long id, String name, Long deadline, int importance, int duration) {
+        Task entry = fetchEntryByIndex(id);
+
+        ContentValues value = new ContentValues();
+
+        value.put(KEY_ID, entry.getId());
+        value.put(KEY_TASK_NAME, name);
+        value.put(KEY_START_TIME, entry.getStartTime());
+        value.put(KEY_DEADLINE, deadline);
+        value.put(KEY_BLOCK_ID, entry.getBlockID());
+        value.put(KEY_URGENCY, entry.getTaskUrgency());
+        value.put(KEY_IMPORTANCE, importance);
+        value.put(KEY_DURATION, duration);
+        value.put(KEY_TASK_TYPE, entry.getTaskType());
+
+        SQLiteDatabase database = getWritableDatabase();
+        database.update(TABLE_NAME_ENTRIES, value, KEY_ID + "=" + id, null);
+        database.close();
+
+        return id;
+    }
+
+    public long updateTaskWithStartTime(long id, long startTime) {
         Task entry = fetchEntryByIndex(id);
 
         ContentValues value = new ContentValues();
 
         value.put(KEY_ID, entry.getId());
         value.put(KEY_TASK_NAME, entry.getTaskName());
-        value.put(KEY_START_TIME, entry.getStartTime());
+        value.put(KEY_START_TIME, startTime);
         value.put(KEY_DEADLINE, entry.getDeadline());
         value.put(KEY_BLOCK_ID, entry.getBlockID());
         value.put(KEY_URGENCY, entry.getTaskUrgency());
@@ -131,6 +153,24 @@ public class TaskDbHelper extends SQLiteOpenHelper {
 
         Cursor cursor = database.query(TABLE_NAME_ENTRIES, columns,
                 null, null, null, null, null);
+
+        while(cursor.moveToNext()) {
+            Task entry = cursorToEntry(cursor);
+            entryList.add(entry);
+        }
+
+        cursor.close();
+        database.close();
+
+        return entryList;
+    }
+
+    public ArrayList<Task> fetchEntriesInOrder() {
+        SQLiteDatabase database = getReadableDatabase();
+        ArrayList<Task> entryList = new ArrayList<Task>();
+
+        Cursor cursor = database.query(TABLE_NAME_ENTRIES, columns,
+                null, null, null, null, KEY_START_TIME + " ASC");
 
         while(cursor.moveToNext()) {
             Task entry = cursorToEntry(cursor);

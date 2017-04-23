@@ -24,7 +24,12 @@
         <activity
             android:name=".AddEventActivity"
             android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ViewTaskDetailsActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:label="@string/title_activity_view_task_details"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

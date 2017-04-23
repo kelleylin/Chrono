@@ -4,6 +4,7 @@
     <!-- Main Activity Action Menu Items-->
     <string name="action_add_task">Add Task</string>
     <string name="action_add_event">Add Event</string>
+    <string name="action_refresh">Refresh</string>
     <string name="action_user_preferences">User Preferences</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -12,9 +13,12 @@
     <string name="title_activity_event">EventActivity</string>
     <string name="list_complete">Complete</string>
     <string name="edit_save">Save</string>
+    <string name="edit_cancel">Cancel</string>
+    <string name="edit_edit">Edit</string>
     <string name="edit_complete">Complete</string>
     <string name="menu_add">Add</string>
     <string name="add_task_title">Task Name</string>
+    <string name="edit_start_time">Proposed Start Time</string>
     <string name="add_task_title_hint">\"Final Paper\"</string>
     <string name="add_task_deadline">Deadline</string>
     <string name="add_task_urgency">Task Urgency</string>
@@ -22,6 +26,7 @@
     <string name="add_task_duration">Anticipated Duration</string>
     <string name="add_task_split_task">If splittable...</string>
     <string name="add_task_min_split">Minimum Split Time</string>
+    <string name="title_activity_view_task_details">Task Details</string>
 
     <!--Add / Edit Task or Event Menu Items-->
 </resources>

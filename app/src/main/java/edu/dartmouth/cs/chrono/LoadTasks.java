@@ -32,6 +32,6 @@ public class LoadTasks extends AsyncTaskLoader<ArrayList<Task>> {
     @Override
     public ArrayList<Task> loadInBackground() {
         TaskDbHelper taskDatabase = new TaskDbHelper(c);
-        return taskDatabase.fetchEntries();
+        return taskDatabase.fetchEntriesInOrder();
     }
 }

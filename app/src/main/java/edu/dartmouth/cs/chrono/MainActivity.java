@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ToDoFragment toDoFragment;
-    SettingsFragment settingsFragment;
+    //SettingsFragment settingsFragment;
     ViewPager viewPager;
     TabLayout tabLayout;
     MyFragmentPagerAdapter myFragmentPagerAdapter;
@@ -29,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout)findViewById(R.id.tab);
 
         toDoFragment = new ToDoFragment();
-        settingsFragment = new SettingsFragment();
+        //settingsFragment = new SettingsFragment();
 
         fragments = new ArrayList<Fragment>();
         fragments.add(toDoFragment);
-        fragments.add(settingsFragment);
+        //fragments.add(settingsFragment);
 
         myFragmentPagerAdapter = new MyFragmentPagerAdapter(getFragmentManager(), fragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
@@ -56,11 +56,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AddTaskActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.action_event) {
+        } else if (id == R.id.refresh) {
+            if (toDoFragment != null) {
+                toDoFragment.updateEntries();
+            }
+            return true;
+        }
+        /*else if (id == R.id.action_event) {
             Intent intent = new Intent(this, AddEventActivity.class);
             startActivity(intent);
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

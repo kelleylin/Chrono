@@ -5,11 +5,13 @@ package edu.dartmouth.cs.chrono;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Adapter to allow for multi-line views in to-do list fragment
  */
-public class TaskViewAdapter extends ArrayAdapter<Task> {
+public class TaskViewAdapter extends ArrayAdapter<Task>{
 
     private Context mContext;
     private ArrayList<Task> entryList;
@@ -65,26 +67,28 @@ public class TaskViewAdapter extends ArrayAdapter<Task> {
 
         TextView title = (TextView) v.findViewById(R.id.task_title);
         TextView text = (TextView) v.findViewById(R.id.task_time);
-        TextView deadlineText = (TextView) v.findViewById(R.id.task_deadline);
+        TextView durationText = (TextView) v.findViewById(R.id.task_deadline);
+        //TextView deadlineText = (TextView) v.findViewById(R.id.task_deadline);
 
         final Task entry = entryList.get(position);
 
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss MMM dd yyyy ");
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy hh:mm a");
         Long startTime = entry.getStartTime();
         String dateString = format.format(startTime);
-        Long deadline = entry.getDeadline();
-        String deadlineString = format.format(deadline);
+        //Long deadline = entry.getDeadline();
+        //String deadlineString = format.format(deadline);
 
         int duration = entry.getDuration();
         int min = duration / 60;
         int secs = duration % 60;
         String durationString = min + " hours, " + secs + " minutes";
 
-        String textString = dateString + ": " + durationString;
+        String textString = "Start: " + dateString;
 
         title.setText(entry.getTaskName());
         text.setText(textString);
-        deadlineText.setText(deadlineString);
+        durationText.setText(durationString);
+        //deadlineText.setText(deadlineString);
 
         // Hide buttons
         Button deleteButton = (Button)v.findViewById(R.id.task_delete);
@@ -101,6 +105,22 @@ public class TaskViewAdapter extends ArrayAdapter<Task> {
                 }
             });
         }
+
+        // View task details and open place to edit
+        v.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ViewTaskDetailsActivity.class);
+                intent.putExtra("entry_id", entry.getId());
+                intent.putExtra("entry_name", entry.getTaskName());
+                intent.putExtra("entry_deadline", entry.getDeadline());
+                intent.putExtra("entry_duration", entry.getDuration());
+                intent.putExtra("entry_importance", entry.getTaskImportance());
+                intent.putExtra("entry_start", entry.getStartTime());
+                mContext.startActivity(intent);
+            }
+        });
 
         return v;
     }
@@ -119,6 +139,14 @@ public class TaskViewAdapter extends ArrayAdapter<Task> {
             Log.d("SCORE", "DELETED TASK | Score of schedule: " + Math.round(score));
             //ArrayList<Long> optimal = ScoreFunction.optimize(current);
             ArrayList<Long> optimal = ScoreFunction.computeSchedule(current);
+
+            if (optimal != null) {
+                ArrayList<Task> present = taskDatabase.fetchEntries();
+                for (int i = 0; i < optimal.size(); i++) {
+                    taskDatabase.updateTaskWithStartTime(present.get(i).getId(), optimal.get(i));
+                }
+            }
+
             return String.valueOf(params[0]);
         }
 

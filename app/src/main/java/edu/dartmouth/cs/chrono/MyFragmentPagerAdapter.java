@@ -33,8 +33,8 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position){
         if(position == 0)
             return "Schedule";
-        else if(position == 1)
-            return "Settings";
+        /*else if(position == 1)
+            return "Settings";*/
         else
             return null;
     }
