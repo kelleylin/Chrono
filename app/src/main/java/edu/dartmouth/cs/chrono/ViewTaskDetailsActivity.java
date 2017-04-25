@@ -303,7 +303,7 @@ public class ViewTaskDetailsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String newId) {
-            Toast.makeText(getApplicationContext(),	"New task was added.",
+            Toast.makeText(getApplicationContext(),	"Task was updated.",
                     Toast.LENGTH_SHORT).show();
         }
     }
