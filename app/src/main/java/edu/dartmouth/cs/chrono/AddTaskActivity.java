@@ -18,6 +18,8 @@ import java.util.Calendar;
 
 public class AddTaskActivity extends AppCompatActivity {
 
+    Boolean failed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,8 @@ public class AddTaskActivity extends AppCompatActivity {
         ArrayList<Task> taskList = new ArrayList<>();
 
         Task newTask = new Task();
+
+        failed = true;
 
         // Name
         EditText nameText = (EditText)findViewById(R.id.add_task_name);
@@ -89,6 +93,15 @@ public class AddTaskActivity extends AppCompatActivity {
                     Integer.parseInt(durationMinutesText.getText().toString());
         } catch (NumberFormatException e) {
             durationMinutes = durationHours * 60;
+        }
+
+        // change the unit of total duration from minutes to milliseconds
+        int durationMilli = durationMinutes * 60000;
+
+        // check if the task can actually be finished before the deadline
+        if (current.getTimeInMillis() + durationMilli > calendar.getTimeInMillis()) {
+            failed = false;
+            return taskList;
         }
 
         newTask.setStartTime(current.getTimeInMillis() + 60000);
@@ -176,11 +189,19 @@ public class AddTaskActivity extends AppCompatActivity {
         if (id == R.id.menu_add) {
             ArrayList<Task> tasks = saveTask();
 
-            for (int i = 0; i < tasks.size(); i++) {
-                EntryAddWorker entryAddWorker = new EntryAddWorker();
-                entryAddWorker.execute(tasks.get(i));
+            if (!failed) {
+                Toast.makeText(getApplicationContext(), "Not a valid task.",
+                        Toast.LENGTH_SHORT).show();
+                return true;
             }
-            finish();
+
+            else {
+                for (int i = 0; i < tasks.size(); i++) {
+                    EntryAddWorker entryAddWorker = new EntryAddWorker();
+                    entryAddWorker.execute(tasks.get(i));
+                }
+                finish();
+            }
 
 
             return true;
@@ -215,8 +236,10 @@ public class AddTaskActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String newId) {
-            Toast.makeText(getApplicationContext(),	"New task was added.",
+
+            Toast.makeText(getApplicationContext(), "New task was added.",
                     Toast.LENGTH_SHORT).show();
+
         }
     }
 }
