@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
+            android:layout_gravity="center"
             />
 
         <TimePicker
@@ -53,22 +54,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner"
+            android:layout_gravity="center"
             />
-
-        <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/add_task_urgency" >
-        </TextView>
-
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_task_urgency_bar"
-            android:numStars="5"
-            android:stepSize="1.0"
-            />-->
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,6 +70,7 @@
             android:id="@+id/add_task_importance_bar"
             android:numStars="5"
             android:stepSize="1.0"
+            android:layout_gravity="center"
             />
 
         <TextView

@@ -5,19 +5,19 @@
 
     <item
         android:id="@+id/action_task"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="@string/action_add_task"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/refresh"
-        android:orderInCategory="100"
-        android:title="@string/action_refresh"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/sync"
+        android:orderInCategory="300"
+        android:title="@string/action_sync"
+        app:showAsAction="always"/>
 
-    <!--<item
-        android:id="@+id/action_event"
+    <item
+        android:id="@+id/action_recalc"
         android:orderInCategory="200"
-        android:title="@string/action_add_event"
-        app:showAsAction="ifRoom" />-->
+        android:title="@string/action_recalc"
+        app:showAsAction="always" />
 </menu>

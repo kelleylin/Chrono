@@ -3,8 +3,8 @@
 
     <!-- Main Activity Action Menu Items-->
     <string name="action_add_task">Add Task</string>
-    <string name="action_add_event">Add Event</string>
-    <string name="action_refresh">Refresh</string>
+    <string name="action_recalc">Recalculate</string>
+    <string name="action_sync">Sync</string>
     <string name="action_user_preferences">User Preferences</string>
 
     <!-- TODO: Remove or change this placeholder text -->

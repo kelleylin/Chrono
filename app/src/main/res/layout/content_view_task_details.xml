@@ -64,6 +64,7 @@
             android:layout_height="wrap_content"
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
+            android:layout_gravity="center"
             />
 
         <TimePicker
@@ -71,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner"
+            android:layout_gravity="center"
             />
 
         <TextView
@@ -87,6 +89,7 @@
             android:numStars="5"
             android:stepSize="1.0"
             android:isIndicator="true"
+            android:layout_gravity="center"
             />
 
         <TextView

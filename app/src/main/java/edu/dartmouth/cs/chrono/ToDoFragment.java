@@ -17,7 +17,7 @@ public class ToDoFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<ArrayList<Task>> {
 
     public ArrayList<Task> entries;
-    private TaskViewAdapter taskAdapter;
+    public TaskViewAdapter taskAdapter;
     private LoaderManager loaderManager;
     private TaskDbHelper taskDatabase;
 
