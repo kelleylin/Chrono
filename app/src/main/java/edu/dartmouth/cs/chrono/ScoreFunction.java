@@ -430,6 +430,14 @@ public class ScoreFunction {
             }
         }
 
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+
+        for (int a = 0; a < bestSchedule.size(); a++) {
+            if (bestSchedule.get(a) < currentTime) {
+                bestSchedule.set(a, currentTime);
+            }
+        }
+
         Log.d("SCHEDULE", "OVERALL BEST");
         printSchedule(bestSchedule);
         return bestSchedule;

@@ -97,8 +97,11 @@ public class MainActivity extends AppCompatActivity {
         // Confirm entry deleted
         @Override
         protected void onPostExecute(String message) {
-            toDoFragment.taskAdapter.notifyDataSetChanged();
-            toDoFragment.updateEntries();
+            if (toDoFragment != null) {
+                if (toDoFragment.taskAdapter != null)
+                    toDoFragment.taskAdapter.notifyDataSetChanged();
+                toDoFragment.updateEntries();
+            }
             Toast.makeText(getApplicationContext(), "Schedule recalculated.", Toast.LENGTH_SHORT).show();
         }
     }
