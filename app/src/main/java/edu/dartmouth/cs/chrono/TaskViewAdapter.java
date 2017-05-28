@@ -83,7 +83,7 @@ public class TaskViewAdapter extends ArrayAdapter<Task>{
         int secs = duration % 60;
         String durationString = min + " hours, " + secs + " minutes";
 
-        String textString = "Start: " + dateString;
+        String textString = dateString;
 
         title.setText(entry.getTaskName());
         text.setText(textString);
