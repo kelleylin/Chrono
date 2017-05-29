@@ -183,6 +183,24 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         return entryList;
     }
 
+    public ArrayList<Task> fetchEntriesByDeadline() {
+        SQLiteDatabase database = getReadableDatabase();
+        ArrayList<Task> entryList = new ArrayList<Task>();
+
+        Cursor cursor = database.query(TABLE_NAME_ENTRIES, columns,
+                null, null, null, null, KEY_DEADLINE + " DESC");
+
+        while (cursor.moveToNext()) {
+            Task entry = cursorToEntry(cursor);
+            entryList.add(entry);
+        }
+
+        cursor.close();
+        database.close();
+
+        return entryList;
+    }
+
     private Task cursorToEntry(Cursor cursor) {
         Task entry = new Task();
 

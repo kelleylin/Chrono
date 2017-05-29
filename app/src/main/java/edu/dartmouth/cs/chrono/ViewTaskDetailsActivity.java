@@ -40,6 +40,7 @@ public class ViewTaskDetailsActivity extends AppCompatActivity {
     String initialName;
 
     boolean meaningfulEdit = false;
+    boolean failed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +186,8 @@ public class ViewTaskDetailsActivity extends AppCompatActivity {
 
     private void updateTask() {
 
+        failed = true;
+
         // Check duration
         int durationHours, durationMinutes;
         try {
@@ -225,6 +228,46 @@ public class ViewTaskDetailsActivity extends AppCompatActivity {
 
         Calendar current = Calendar.getInstance();
 
+        // change the unit of total duration from minutes to milliseconds
+        int durationMilli = durationMinutes * 60000;
+
+        // check if the task can actually be finished before the deadline
+        if (current.getTimeInMillis() + durationMilli > inputDeadline.getTimeInMillis()) {
+            failed = false;
+            return;
+        }
+
+        TaskDbHelper taskDatabase = new TaskDbHelper(getApplicationContext());
+        ArrayList<Task> currentTasks = taskDatabase.fetchEntriesByDeadline();
+
+        // find the latest deadline in the current list of tasks
+        long latestDeadline = 0;
+        if (currentTasks.size() != 0) {
+            latestDeadline = currentTasks.get(0).getDeadline();
+        }
+
+        // check if the deadline of the task we want to update is later than the
+        // current latest deadline
+        if (inputDeadline.getTimeInMillis() > latestDeadline) {
+            latestDeadline = inputDeadline.getTimeInMillis();
+        }
+
+        // calculate what the new total duration of the tasks will be
+        int totalDuration = durationMinutes;
+        for (int i = 0; i < currentTasks.size(); i++) {
+            if (!currentTasks.get(i).getId().equals(id)) {
+                totalDuration += currentTasks.get(i).getDuration();
+            }
+        }
+
+        Calendar currentTime = Calendar.getInstance();
+
+        // check if all the tasks can be completed by the latest deadline
+        if (currentTime.getTimeInMillis() + totalDuration * 60000 > latestDeadline) {
+            failed = false;
+            return;
+        }
+
         if (initialImportance != (int)importanceBar.getRating() |
                 initialDuration != durationMinutes | deadlineDiff) {
             meaningfulEdit = true;
@@ -249,6 +292,13 @@ public class ViewTaskDetailsActivity extends AppCompatActivity {
             invalidateOptionsMenu();
         } else if (id == R.id.edit_save) {
             updateTask();
+
+            if (!failed) {
+                Toast.makeText(getApplicationContext(), "This task can no longer be finished by its deadline.",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
             editable = false;
             updateTask();
             finish();
