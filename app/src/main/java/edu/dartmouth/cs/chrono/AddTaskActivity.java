@@ -185,8 +185,13 @@ public class AddTaskActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == R.id.menu_add_cancel) {
+            finish();
+            return true;
+        }
+
         // start relevant activity
-        if (id == R.id.menu_add) {
+        else if (id == R.id.menu_add) {
             ArrayList<Task> tasks = saveTask();
 
             if (!failed) {
