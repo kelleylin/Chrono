@@ -188,7 +188,7 @@ public class TaskDbHelper extends SQLiteOpenHelper {
         ArrayList<Task> entryList = new ArrayList<Task>();
 
         Cursor cursor = database.query(TABLE_NAME_ENTRIES, columns,
-                null, null, null, null, KEY_DEADLINE + " DESC");
+                null, null, null, null, KEY_DEADLINE + " ASC");
 
         while (cursor.moveToNext()) {
             Task entry = cursorToEntry(cursor);

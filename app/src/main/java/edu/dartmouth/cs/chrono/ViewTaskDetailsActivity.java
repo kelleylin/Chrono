@@ -240,22 +240,14 @@ public class ViewTaskDetailsActivity extends AppCompatActivity {
         TaskDbHelper taskDatabase = new TaskDbHelper(getApplicationContext());
         ArrayList<Task> currentTasks = taskDatabase.fetchEntriesByDeadline();
 
-        // find the latest deadline in the current list of tasks
-        long latestDeadline = 0;
-        if (currentTasks.size() != 0) {
-            latestDeadline = currentTasks.get(0).getDeadline();
-        }
-
-        // check if the deadline of the task we want to update is later than the
-        // current latest deadline
-        if (inputDeadline.getTimeInMillis() > latestDeadline) {
-            latestDeadline = inputDeadline.getTimeInMillis();
-        }
+        // get deadline of task being updated
+        long latestDeadline = inputDeadline.getTimeInMillis();
 
         // calculate what the new total duration of the tasks will be
         int totalDuration = durationMinutes;
         for (int i = 0; i < currentTasks.size(); i++) {
-            if (!currentTasks.get(i).getId().equals(id)) {
+            if (!currentTasks.get(i).getId().equals(id) &&
+                    currentTasks.get(i).getDeadline() < latestDeadline) {
                 totalDuration += currentTasks.get(i).getDuration();
             }
         }
