@@ -195,19 +195,56 @@ public class AddTaskActivity extends AppCompatActivity {
             ArrayList<Task> tasks = saveTask();
 
             if (!failed) {
-                Toast.makeText(getApplicationContext(), "Not a valid task.",
+                Toast.makeText(getApplicationContext(), "This task cannot be completed by its deadline.",
                         Toast.LENGTH_SHORT).show();
                 return true;
             }
 
             else {
+
+                // calculate the total time of the tasks to be added
+                int totalDuration = 0;
                 for (int i = 0; i < tasks.size(); i++) {
-                    EntryAddWorker entryAddWorker = new EntryAddWorker();
-                    entryAddWorker.execute(tasks.get(i));
+                    totalDuration += tasks.get(i).getDuration();
                 }
-                finish();
+
+                // get the list of tasks currently in the database
+                TaskDbHelper taskDatabase = new TaskDbHelper(getApplicationContext());
+                ArrayList<Task> current = taskDatabase.fetchEntriesByDeadline();
+
+                // find the latest deadline in the current list of tasks in the database
+                long latestDeadline = 0;
+                if (current.size() != 0) {
+                    latestDeadline = current.get(0).getDeadline();
+                }
+
+                // check if the deadline of the task(s) we want to add is later than the
+                // current latest deadline
+                if (tasks.get(0).getDeadline() > latestDeadline) {
+                    latestDeadline = tasks.get(0).getDeadline();
+                }
+
+                // calculate the total time of the tasks in the database
+                for (int i = 0; i < current.size(); i++) {
+                    totalDuration += current.get(i).getDuration();
+                }
+
+                Calendar currentTime = Calendar.getInstance();
+
+                // check if all the tasks can be completed by the latest deadline
+                if (currentTime.getTimeInMillis() + totalDuration * 60000 > latestDeadline) {
+                    Toast.makeText(getApplicationContext(), "This task cannot be completed with " +
+                                    "tasks already scheduled",
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
             }
 
+            for (int i = 0; i < tasks.size(); i++) {
+                EntryAddWorker entryAddWorker = new EntryAddWorker();
+                entryAddWorker.execute(tasks.get(i));
+            }
+            finish();
 
             return true;
         }
